@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#ceb1ca"><meta name="author" content="WinX"><meta name="copyright" content="WinX"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>PHP_数组溢出分析 | WinXのgit_Blog</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.24/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_j5gk85dg4pf.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/WinX.ico"><link rel="mask-icon" href="/WinX.ico" color="#ceb1ca"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"hostname":"github.winxcloud.top","root":"/","title":["小","白","の","博","客","世","界"],"version":"1.6.1","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"想要搜些什么？","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"/data/sentences.json"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="stylesheet" href="/"><link rel="stylesheet" href="/c"><link rel="stylesheet" href="/s"><link rel="stylesheet" href="/s"><link rel="stylesheet" href="/"><link rel="stylesheet" href="/h"><link rel="stylesheet" href="/e"><link rel="stylesheet" href="/x"><link rel="stylesheet" href="/o"><link rel="stylesheet" href="/-"><link rel="stylesheet" href="/t"><link rel="stylesheet" href="/h"><link rel="stylesheet" href="/e"><link rel="stylesheet" href="/m"><link rel="stylesheet" href="/e"><link rel="stylesheet" href="/-"><link rel="stylesheet" href="/y"><link rel="stylesheet" href="/u"><link rel="stylesheet" href="/n"><link rel="stylesheet" href="/."><link rel="stylesheet" href="/c"><link rel="stylesheet" href="/s"><link rel="stylesheet" href="/s"><script src="/" defer></script><script src="/" defer></script><script src="/a" defer></script><script src="/t" defer></script><script src="/." defer></script><script src="/a" defer></script><script src="/l" defer></script><script src="/i" defer></script><script src="/c" defer></script><script src="/d" defer></script><script src="/n" defer></script><script src="/." defer></script><script src="/c" defer></script><script src="/o" defer></script><script src="/m" defer></script><script src="/" defer></script><script src="/t" defer></script><script src="/" defer></script><script src="/f" defer></script><script src="/o" defer></script><script src="/n" defer></script><script src="/t" defer></script><script src="/_" defer></script><script src="/8" defer></script><script src="/d" defer></script><script src="/5" defer></script><script src="/l" defer></script><script src="/8" defer></script><script src="/f" defer></script><script src="/z" defer></script><script src="/k" defer></script><script src="/5" defer></script><script src="/b" defer></script><script src="/8" defer></script><script src="/7" defer></script><script src="/i" defer></script><script src="/u" defer></script><script src="/d" defer></script><script src="/i" defer></script><script src="/." defer></script><script src="/j" defer></script><script src="/s" defer></script><meta name="description" content="实际上并没有得出什么重大的结论，不过最后的总结还能看看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP_数组溢出分析">
+<meta property="og:url" content="http://github.winxcloud.top/2021/06/PHP_%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90/">
+<meta property="og:site_name" content="WinXのgit_Blog">
+<meta property="og:description" content="实际上并没有得出什么重大的结论，不过最后的总结还能看看">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605012956722.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605020343064.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605023146459.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605031029452.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605031512329.png">
+<meta property="article:published_time" content="2021-06-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-06-04T16:00:00.000Z">
+<meta property="article:author" content="WinX">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605012956722.png"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="WinX"><img width="96" loading="lazy" src="/img/avatar.jpg" alt="WinX"><span class="site-author-status" title="我知道我菜，在爬了在爬了">👻</span></a><div class="site-author-name"><a href="/about/">WinX</a></div><span class="site-name">WinXのgit_Blog</span><sub class="site-subtitle">A Shelter</sub><div class="site-desciption">WinX's blog</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">7</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">3</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">4</span></a></div><a class="site-state-item hty-icon-button" href="/pages/" title="我自己"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Win-X" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/14030643" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:win.x@foxmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/WinxOnTg" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="大佬们的博客" style="color:#007ACC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PHP-%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">PHP_数组溢出分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#int%E5%8F%98%E9%87%8F%E6%B5%8B%E8%AF%95"><span class="toc-number">1.1.</span> <span class="toc-text">int变量测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E6%B5%8B%E8%AF%95"><span class="toc-number">1.2.</span> <span class="toc-text">数组测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%8E%E7%99%BD%E4%BA%86%EF%BC%8C%E4%BB%A5%E4%B8%8A%E5%85%A8%E5%9C%A8%E7%9E%8E%E6%89%AF%EF%BC%8C%E7%9B%B4%E6%8E%A5%E7%9C%8B%E6%80%BB%E7%BB%93%E5%B0%B1%E5%A5%BD"><span class="toc-number">1.3.</span> <span class="toc-text">明白了，以上全在瞎扯，直接看总结就好</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2021%E5%B9%B46%E6%9C%886%E6%97%A5%E6%96%B0%E5%A2%9E%EF%BC%9A"><span class="toc-number">1.4.0.1.</span> <span class="toc-text">2021年6月6日新增：</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="http://github.winxcloud.top/2021/06/PHP_%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="WinX"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="WinXのgit_Blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">PHP_数组溢出分析<a class="post-edit-link" href="https://github.com/Win-X/Win-X.github.io/tree/master/source/_posts/_posts/PHP_数组溢出分析.md" target="_blank" title="编辑" rel="noopener"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-edit-line"></use></svg></a></h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2021-06-05 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-05T00:00:00+08:00">2021-06-05</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/" style="--text-color:#d0021b" itemprop="url" rel="index"><span itemprop="text">安全相关</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/PHP/" style="--text-color:#0E83CD"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">PHP</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#ceb1ca;"><p>实际上并没有得出什么重大的结论，不过最后的总结还能看看<span id="more"></span></p>
+<p>[TOC]</p>
+<h1 id="PHP-数组溢出分析"><a href="#PHP-数组溢出分析" class="headerlink" title="PHP_数组溢出分析"></a>PHP_数组溢出分析</h1><p><strong>环境：php 7.4.0</strong></p>
+<p>首先，在一个64位系统中，php里面int型变量所占内存大小为64位，其中最前面的一位为符号位，0表示正数，1表示负数</p>
+<p>本文全程以64位系统中的php着手，从比特位的角度分析，为了便于表示，本文大部分将采用0x数，即16进制数表示，即</p>
+<pre class="line-numbers language-none"><code class="language-none">0x7FFFFFFFFFFFFFFF（16进制） &#x3D;&#x3D; 9223372036854775807（10进制） &#x3D;&#x3D; 0b0111111111111111111111111111111111111111111111111111111111111111（二进制）
+0x000000000000000A（16进制） &#x3D;&#x3D; 10（10进制） &#x3D;&#x3D; 0b0000000000000000000000000000000000000000000000000000000000001010（二进制）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="int变量测试"><a href="#int变量测试" class="headerlink" title="int变量测试"></a>int变量测试</h2><p>一个int型的变量的字节表示从全0开始，每次加一，即对应的十进制大小加一，即</p>
+<pre class="line-numbers language-none"><code class="language-none">正，大数：
+$num1&#x3D;0x7FFFFFFFFFFFFFFA;
+var_dump($num1);
+$num1++;
+var_dump($num1);
+
+负数，十六进制：
+echo(dechex(-9223372036854775806));	&#x2F;&#x2F;该数为int型边界值减二
+var_dump(-9223372036854775806);
+
+-2测试：
+echo(dechex(-2));
+var_dump(0xFFFFFFFFFFFFFFFE);		&#x2F;&#x2F;对照代码执行图，php将-2十六进制解析为0xFFFFFFFFFFFFFFFE
+$num2&#x3D;0xFFFFFFFFFFFFFFFE;			&#x2F;&#x2F;却将0xFFFFFFFFFFFFFFFE解析为浮点型
+var_dump($num2);
+
+负数，十进制：
+$num2&#x3D;-9223372036854775806;
+var_dump($num2);
+$num2++;
+var_dump($num2);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605012956722.png" alt="image-20210605012956722" loading="lazy"></p>
+<p>可以发现，php中，<strong>在未到达边界时，正数十六进制形式赋值正常，自增正常增加；而负数十六进制赋值时判断为浮点型，十进制赋值时正常，自增时绝对值正常减小。</strong></p>
+<p>而，当遇到边界时：</p>
+<pre class="line-numbers language-none"><code class="language-none">正数边界：
+$num1&#x3D;0x7FFFFFFFFFFFFFFF;
+var_dump($num1);
+$num1++;
+echo(dechex($num1));
+var_dump($num1);
+
+负数边界：
+$num2&#x3D;-9223372036854775807;
+echo(dechex($num2));
+var_dump($num2);
+$num2--;
+echo(dechex($num2));
+var_dump($num2);
+$num2--;
+echo(dechex($num2));
+var_dump($num2);
+$num2--;
+echo(dechex($num2));
+var_dump($num2);
+
+普通浮点型数据dechex()函数测试：
+$num3&#x3D;1.3;
+echo(dechex($num3));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605020343064.png" alt="image-20210605020343064" loading="lazy"></p>
+<p>int类型数据的表示范围为0x7FFFFFFFFFFFFFFF<del>8000000000000000，即-9223372036854775808</del>9223372036854775807</p>
+<h2 id="数组测试"><a href="#数组测试" class="headerlink" title="数组测试"></a>数组测试</h2><p>首先，php数组类型的变量有一下几种赋值方法：</p>
+<blockquote>
+<p>$变量名=array(数组元素);                 数组元素可以是任意数据类型<br>$变量名=[数组元素];                         数组元素的顺序以放入顺序为准，跟下标无关<br>$变量名[ ]=单个数组元素;                 随着每次定义，下表逐渐加一<br>$变量名[下标]=单个数组元素值;        若前面规定了下标，则新定义的默认下标从最大值加一</p>
+</blockquote>
+<p>下文中主要用到3，4类型的赋值方式，即自动下标+1赋值与手动定义下标赋值</p>
+<pre class="line-numbers language-none"><code class="language-none">正，大数：
+$num2[0x7FFFFFFFFFFFFFFE]&#x3D;2;
+var_dump($num2);
+$num2[]&#x3D;2;
+var_dump($num2);
+
+负，小数，十六进制：
+$num4[0xfffffffffffffc00]&#x3D;2;
+var_dump($num4);
+$num4[]&#x3D;2;
+var_dump($num4);
+$num5[0xfffffffffffff000]&#x3D;2;
+var_dump($num5);
+$num5[]&#x3D;2;
+var_dump($num5);
+echo(dechex(-4096));
+
+负，大数，十六进制：
+$num1[0x8000000000000001]&#x3D;2;
+var_dump($num1);
+$num1[]&#x3D;2;
+var_dump($num1);
+$num3[0x8000000FF0000001]&#x3D;2;
+var_dump($num3);
+$num3[]&#x3D;2;
+var_dump($num3);
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605023146459.png" alt="image-20210605023146459" loading="lazy"></p>
+<p>写着写着感觉不到写它的意义了，而且好费脑子（让我原本就不聪明的脑子雪上加霜）</p>
+<p>后面目前能想到的是，负大数那边的十六进制数组赋值不是有些奇怪的现象嘛，然后用十进制赋值，再写一段，然后总结规律什么的吧，不过想不到写这些的意义，没动力写下去了，趴</p>
+<p>下面是让我想要写这篇博客的起因，越界后发现了某种新的数据类型</p>
+<pre class="line-numbers language-none"><code class="language-none">界内开始，使用三方法自动下标+1；
+$array[9223372036854775806]&#x3D;2;
+print_r($array);
+var_dump($array[]&#x3D;2);
+print_r($array);
+@var_dump($array[]&#x3D;2);      &#x2F;&#x2F;这里发生越界，赋值失败
+print_r($array);
+
+unset($array);
+界内开始，使用四方法手动规定下表
+var_dump($array[9223372036854775806]&#x3D;2);print_r($array);
+var_dump($array[9223372036854775807]&#x3D;2);print_r($array);
+var_dump($array[9223372036854775808]&#x3D;2);print_r($array);
+var_dump($array[9223372036854775809]&#x3D;2);print_r($array);
+var_dump($array[]&#x3D;2);print_r($array);
+var_dump($array[]&#x3D;2);print_r($array);
+
+unset($array);
+界上开始，四方法手动顶下标，未果，再使用三方法自动
+var_dump($array[9223372036854775808]&#x3D;2);print_r($array);
+var_dump($array[9223372036854775809]&#x3D;2);print_r($array);
+var_dump($array[]&#x3D;2);print_r($array);
+var_dump($array[]&#x3D;2);print_r($array);
+var_dump($array[]&#x3D;2);print_r($array);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605031029452.png" alt="image-20210605031029452" loading="lazy"></p>
+<h2 id="明白了，以上全在瞎扯，直接看总结就好"><a href="#明白了，以上全在瞎扯，直接看总结就好" class="headerlink" title="明白了，以上全在瞎扯，直接看总结就好"></a>明白了，以上全在瞎扯，直接看总结就好</h2><p>这里贴上越界后的数组表达，感觉像是越界后，在那一段数组内存外紧邻的地方也存入了数据，系统也把它当作数组了，要访问似乎只能通过这个越界的数组，试一下</p>
+<pre class="line-numbers language-none"><code class="language-none">var_dump($array[9223372036854775808]&#x3D;2);print_r($array);
+var_dump($array[9223372036854775809]&#x3D;2);print_r($array);
+var_dump($array[]&#x3D;3);print_r($array);
+var_dump($array[]&#x3D;4);print_r($array);
+var_dump($array[]&#x3D;5);print_r($array);
+print_r(&#39;&lt;br&gt;&#39;.$array[0]);
+print_r(&#39;&lt;br&gt;&#39;.$array[1]);
+print_r(&#39;&lt;br&gt;&#39;.$array[2]);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Win-X/WinX_img@latest/img2021/06/05-image-20210605031512329.png" alt="image-20210605031512329" loading="lazy"></p>
+<p>破案了，越界后，继续使用自动下标的话，是从头开始重新赋值，并不是内存外面的东西</p>
+<p>所以说，这里唯一能用到的漏洞，就是自动下标给越界后的数组赋值时，会产生赋值失败，从而返回值为null，判断为假，用来绕过某些ctf_web题</p>
+<p>即</p>
+<pre class="line-numbers language-none"><code class="language-none">$array[9223372036854775807]&#x3D;2；
+var_dump($array[]&#x3D;3)；<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>上一次给（2^63-1）位置赋值后，下一次自动赋值时，会给（2^63位置）赋值，从而产生错误（必须是自动赋值，即**$array[]=x;**的赋值方式）</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>自动下标给越界位置的数组下标赋值时，会产生赋值失败，从而返回值为null，判断为假，用来绕过某些ctf_web题</p>
+<p>用法：</p>
+<pre class="line-numbers language-none"><code class="language-none">$array[9223372036854775807]&#x3D;2；
+var_dump($array[]&#x3D;3)；
+
+其中，变量名任意，赋值内容任填，上一次给（2^63-1）位置赋值后，下一次自动赋值时，会给（2^63位置）赋值，从而赋值失败，返回null
+（必须是自动赋值，即【$array[]&#x3D;x;】的赋值方式）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="2021年6月6日新增："><a href="#2021年6月6日新增：" class="headerlink" title="2021年6月6日新增："></a>2021年6月6日新增：</h4><p>今天复现一个例题的过程中，偶然间发现，5.6.40版本的php在2^63 -2的时候就已经把变量识别为浮点型float，而2^31+1时仍是整形，版本改为7.4.0后是在2^63处溢出的</p>
+<p>该版本下的具体范围我之后再测试吧，这里先挖个坑</p>
+<p>以上</p>
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>WinX</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://github.winxcloud.top/2021/06/PHP_%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90/" title="PHP_数组溢出分析">http://github.winxcloud.top/2021/06/PHP_%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2021/06/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%89%BE%E9%9B%B6%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95_&amp;_scanf%E5%87%BD%E6%95%B0%E6%B5%85%E6%9E%90/" rel="prev" title="一个简单的找零贪婪算法_&amp;_scanf函数浅析"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">一个简单的找零贪婪算法_&amp;_scanf函数浅析</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2021/04/ssh%E9%80%9A%E8%BF%87rsa%E5%85%AC%E9%92%A5%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="next" title="ssh 免密码连接服务器"><span class="post-nav-text">ssh 免密码连接服务器</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>要不要和我说些什么？</span><br></div></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">晋ICP备2021001815号</a></div><div class="copyright"><span>&copy; 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> WinX</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.6.1</span></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#ceb1ca" stroke-width="2" stroke-linecap="round"></circle></svg></a></div></body></html>

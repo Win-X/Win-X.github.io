@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#ceb1ca"><meta name="author" content="WinX"><meta name="copyright" content="WinX"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>Python学习记录——基础 | WinXのgit_Blog</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.24/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_j5gk85dg4pf.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/WinX.ico"><link rel="mask-icon" href="/WinX.ico" color="#ceb1ca"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"hostname":"github.winxcloud.top","root":"/","title":["小","白","の","博","客","世","界"],"version":"1.6.1","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"想要搜些什么？","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"/data/sentences.json"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="stylesheet" href="/"><link rel="stylesheet" href="/c"><link rel="stylesheet" href="/s"><link rel="stylesheet" href="/s"><link rel="stylesheet" href="/"><link rel="stylesheet" href="/h"><link rel="stylesheet" href="/e"><link rel="stylesheet" href="/x"><link rel="stylesheet" href="/o"><link rel="stylesheet" href="/-"><link rel="stylesheet" href="/t"><link rel="stylesheet" href="/h"><link rel="stylesheet" href="/e"><link rel="stylesheet" href="/m"><link rel="stylesheet" href="/e"><link rel="stylesheet" href="/-"><link rel="stylesheet" href="/y"><link rel="stylesheet" href="/u"><link rel="stylesheet" href="/n"><link rel="stylesheet" href="/."><link rel="stylesheet" href="/c"><link rel="stylesheet" href="/s"><link rel="stylesheet" href="/s"><script src="/" defer></script><script src="/" defer></script><script src="/a" defer></script><script src="/t" defer></script><script src="/." defer></script><script src="/a" defer></script><script src="/l" defer></script><script src="/i" defer></script><script src="/c" defer></script><script src="/d" defer></script><script src="/n" defer></script><script src="/." defer></script><script src="/c" defer></script><script src="/o" defer></script><script src="/m" defer></script><script src="/" defer></script><script src="/t" defer></script><script src="/" defer></script><script src="/f" defer></script><script src="/o" defer></script><script src="/n" defer></script><script src="/t" defer></script><script src="/_" defer></script><script src="/8" defer></script><script src="/d" defer></script><script src="/5" defer></script><script src="/l" defer></script><script src="/8" defer></script><script src="/f" defer></script><script src="/z" defer></script><script src="/k" defer></script><script src="/5" defer></script><script src="/b" defer></script><script src="/8" defer></script><script src="/7" defer></script><script src="/i" defer></script><script src="/u" defer></script><script src="/d" defer></script><script src="/i" defer></script><script src="/." defer></script><script src="/j" defer></script><script src="/s" defer></script><meta name="description" content="[TOC] Python2.x 中使用 Python3.x 的 print 函数 &gt;&gt;&gt; list &#x3D;[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;] &gt;&gt;&gt; print list    # python2.x 的 print 语句 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python学习记录——基础">
+<meta property="og:url" content="http://github.winxcloud.top/2021/03/python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
+<meta property="og:site_name" content="WinXのgit_Blog">
+<meta property="og:description" content="[TOC] Python2.x 中使用 Python3.x 的 print 函数 &gt;&gt;&gt; list &#x3D;[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;] &gt;&gt;&gt; print list    # python2.x 的 print 语句 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-18T16:00:00.000Z">
+<meta property="article:author" content="WinX">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="WinX"><img width="96" loading="lazy" src="/img/avatar.jpg" alt="WinX"><span class="site-author-status" title="我知道我菜，在爬了在爬了">👻</span></a><div class="site-author-name"><a href="/about/">WinX</a></div><span class="site-name">WinXのgit_Blog</span><sub class="site-subtitle">A Shelter</sub><div class="site-desciption">WinX's blog</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">7</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">3</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">4</span></a></div><a class="site-state-item hty-icon-button" href="/pages/" title="我自己"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Win-X" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/14030643" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:win.x@foxmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/WinxOnTg" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="大佬们的博客" style="color:#007ACC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%AD%97"><span class="toc-number">1.</span> <span class="toc-text">数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.</span> <span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">3.</span> <span class="toc-text">运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">一些内置函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.</span> <span class="toc-text">删除对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="toc-number">6.</span> <span class="toc-text">基本输入输出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%EF%BC%9Ainput-%E2%80%98%E6%8F%90%E7%A4%BA%E2%80%99"><span class="toc-number">6.0.1.</span> <span class="toc-text">输入：input(‘提示’)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%EF%BC%9Aprint"><span class="toc-number">6.0.2.</span> <span class="toc-text">输出：print()</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%EF%BC%9A"><span class="toc-number">6.0.2.0.1.</span> <span class="toc-text">参数：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%AF%BC%E5%85%A5%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="toc-number">7.</span> <span class="toc-text">模块导入与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#import-%E6%A8%A1%E5%9D%97%E5%90%8D-as-%E5%88%AB%E5%90%8D"><span class="toc-number">7.0.1.</span> <span class="toc-text">import  模块名  [as  别名]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#from-%E6%A8%A1%E5%9D%97%E5%90%8D-import-%E5%AF%B9%E8%B1%A1%E5%90%8D-as-%E5%88%AB%E5%90%8D"><span class="toc-number">7.0.2.</span> <span class="toc-text">from  模块名  import  对象名 [as  别名]</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-number">8.</span> <span class="toc-text">代码编写规范</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%A9%E8%BF%9B"><span class="toc-number">8.0.1.</span> <span class="toc-text">缩进</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E9%87%8A"><span class="toc-number">8.0.2.</span> <span class="toc-text">注释</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="toc-number">8.0.2.0.1.</span> <span class="toc-text">行注释</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9D%97%E6%B3%A8%E9%87%8A"><span class="toc-number">8.0.2.0.2.</span> <span class="toc-text">块注释</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">8.0.3.</span> <span class="toc-text">其他</span></a></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="http://github.winxcloud.top/2021/03/python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="WinX"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="WinXのgit_Blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Python学习记录——基础<a class="post-edit-link" href="https://github.com/Win-X/Win-X.github.io/tree/master/source/_posts/_posts/python学习记录.md" target="_blank" title="编辑" rel="noopener"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-edit-line"></use></svg></a></h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2021-03-19 00:00:00" itemprop="dateCreated datePublished" datetime="2021-03-19T00:00:00+08:00">2021-03-19</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E7%BC%96%E7%A8%8B%E7%9B%B8%E5%85%B3/" style="--text-color:#9013fe" itemprop="url" rel="index"><span itemprop="text">编程相关</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/Python/" style="--text-color:#3776ab"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">Python</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#ceb1ca;"><p>[TOC]</p>
+<p><em>Python2.x 中使用 Python3.x 的 print 函数</em></p>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; list &#x3D;[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+&gt;&gt;&gt; print list    # python2.x 的 print 语句
+[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+&gt;&gt;&gt; from __future__ import print_function  # 导入 __future__ 包
+&gt;&gt;&gt; print list     # Python2.x 的 print 语句被禁用，使用报错
+  File &quot;&lt;stdin&gt;&quot;, line 1
+    print list
+             ^
+SyntaxError: invalid syntax
+&gt;&gt;&gt; print (list)   # 使用 Python3.x 的 print 函数
+[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+&gt;&gt;&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><ul>
+<li><p>整数</p>
+<ul>
+<li>十进制整数</li>
+<li>十六进制整数，0x开头，小写字母</li>
+<li>八进制整数，0o开头</li>
+<li>二进制整数，0b开头</li>
+</ul>
+</li>
+<li><p>浮点数</p>
+</li>
+<li><p>复数</p>
+<ul>
+<li><p>与数学中的复数形式完全一致，由实部和虚部构成，使用j或者J来表示虚部</p>
+<ul>
+<li>var.real  查看复数实部</li>
+<li>var.imag  查看复数虚部</li>
+<li>var.conjugate()  返回共轭复数</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; a&#x3D;3+4j
+&gt;&gt;&gt; b&#x3D;5+6j
+&gt;&gt;&gt; c&#x3D;a+b
+&gt;&gt;&gt; c
+(8+10j)
+&gt;&gt;&gt; c.real
+8.0
+&gt;&gt;&gt; c.imag
+10.0
+&gt;&gt;&gt; a.conjugate()
+(3-4j)
+&gt;&gt;&gt; a*b
+(-9+38j)
+&gt;&gt;&gt; a&#x2F;b
+(0.6393442622950819+0.03278688524590165j)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+</ul>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>python中，字符串属于不可变序列，一般使用单引号，双引号，三引号进行界定，且可以互相嵌套，用来表示复杂字符串，空字符串表示为‘’或‘’‘’或‘’‘’‘’</p>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; a&#x3D;&#39; &#39;&#39;&#39;这里是单引号中的三单引号&#39;&#39;&#39; &#39;
+  File &quot;&lt;stdin&gt;&quot;, line 1
+    a&#x3D;&#39; &#39;&#39;&#39;这里是单引号中的三单引号&#39;&#39;&#39; &#39;
+           ^
+SyntaxError: invalid syntax
+&gt;&gt;&gt; a&#x3D;&#39;&#39;&#39; &#39;这里是三单引号中的单引号&#39; &#39;&#39;&#39;
+&gt;&gt;&gt; print(a)
+ &#39;这里是三单引号中的单引号&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>​                特别的，一对三单引号或三双引号表示的字符串支持换行</p>
+<ul>
+<li>字符串支持使用+运算符进行合并生成新字符串</li>
+<li>字符串支持格式化字符%a , %d , %c 等</li>
+<li>字符串支持转义字符</li>
+<li>字符串界定符前加字母r或R，表示原始字符串，其中的特殊字符不进行转义</li>
+</ul>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><p>过多，详见<a href="https://www.runoob.com/python/python-operators.html">https://www.runoob.com/python/python-operators.html</a></p>
+<h2 id="一些内置函数"><a href="#一些内置函数" class="headerlink" title="一些内置函数"></a>一些内置函数</h2><p>print()    打印内容</p>
+<p>id()        获取变量所在的内存地址</p>
+<p>type()    返回变量类型</p>
+<p>isinstance()    测试对象是否为指定类型的实例</p>
+<p>imp/importlib.reload()    重新导入模块</p>
+<h2 id="删除对象"><a href="#删除对象" class="headerlink" title="删除对象"></a>删除对象</h2><p>python中，使用del命令来删除对象并解除值与值之间的指向关系。若删除对象后，仍有变量指向该值，则不在内存中删除该值，否则删除</p>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; a&#x3D;1
+&gt;&gt;&gt; a
+1
+&gt;&gt;&gt; del a
+&gt;&gt;&gt; a
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+NameError: name &#39;a&#39; is not defined<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p><strong>※    python采用的是基于值的内存管理方式</strong></p>
+<p>​        相同值的不同变量指向同一内存地址；同一个变量赋予不同的值，变量的内存地址也会相应变化</p>
+<p>​        当为一个变量赋予一个新的值时，是先将值存入内存中，然后将变量指向该值的内存地址</p>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; x&#x3D;3
+&gt;&gt;&gt; id(x)
+1870807132528
+&gt;&gt;&gt; y&#x3D;3
+&gt;&gt;&gt; id(y)
+1870807132528
+&gt;&gt;&gt; y&#x3D;5
+&gt;&gt;&gt; id(y)
+1870807132592
+&gt;&gt;&gt; id(x)
+1870807132528
+&gt;&gt;&gt; id(5)
+1870807132592<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="基本输入输出"><a href="#基本输入输出" class="headerlink" title="基本输入输出"></a>基本输入输出</h2><h4 id="输入：input-‘提示’"><a href="#输入：input-‘提示’" class="headerlink" title="输入：input(‘提示’)"></a>输入：input(‘提示’)</h4><pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; a&#x3D;input(&#39;这里是提示&#39;)
+这里是提示你好
+&gt;&gt;&gt; a
+&#39;你好&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>#python2中，input函数返回结果由输入时的值决定，而python3中的返回值全为字符串，等价于python2中的 raw_input() 函数</p>
+<h4 id="输出：print"><a href="#输出：print" class="headerlink" title="输出：print()"></a>输出：print()</h4><p>​    #python2中使用print语句输出，而python3中使用print()函数输出</p>
+<pre class="line-numbers language-none"><code class="language-none">print(*objects, sep&#x3D;&#39; &#39;, end&#x3D;&#39;\n&#39;, file&#x3D;sys.stdout, flush&#x3D;False)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>​    </p>
+<h6 id="参数："><a href="#参数：" class="headerlink" title="参数："></a>参数：</h6><ul>
+<li>objects – 复数，表示可以一次输出多个对象。输出多个对象时，需要用 , 分隔。</li>
+<li>sep – 用来间隔多个对象，默认值是一个空格。</li>
+<li>end – 用来设定以什么结尾。默认值是换行符 \n，我们可以换成其他字符串。</li>
+<li>file – 要写入的文件对象。</li>
+<li>flush – 输出是否被缓存通常决定于 file，但如果 flush 关键字参数为 True，流会被强制刷新。</li>
+</ul>
+<h2 id="模块导入与使用"><a href="#模块导入与使用" class="headerlink" title="模块导入与使用"></a>模块导入与使用</h2><ul>
+<li><h4 id="import-模块名-as-别名"><a href="#import-模块名-as-别名" class="headerlink" title="import  模块名  [as  别名]"></a>import  模块名  [as  别名]</h4><p>这种方式导入以后，需要在要使用的对象之前加上前缀，即 “模块名.对象名” 的方式访问，设置别名后，可以使用 “别名.对象名” 的方式使用其中的对象。</p>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; import math
+&gt;&gt;&gt; math.sin(0.5)
+0.479425538604203
+&gt;&gt;&gt; import random as r
+&gt;&gt;&gt; x&#x3D;r.random()
+&gt;&gt;&gt; x
+0.18782326766908408<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><h4 id="from-模块名-import-对象名-as-别名"><a href="#from-模块名-import-对象名-as-别名" class="headerlink" title="from  模块名  import  对象名 [as  别名]"></a>from  模块名  import  对象名 [as  别名]</h4><p>使用这种方式仅导入明确指定的对象，并且可以为导入的对象起一个别名。这种导入方式可以 减少查询次数，提高访问速度，同时也减少了程序员需要输入的代码量，而不需要使用模块名作为前缀</p>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; from math import sin
+&gt;&gt;&gt; sin(3)
+0.1411200080598672<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<p>#在导入模块时，python首先在当前目录中查找需要导入的模块，如果没有找到，则从sys模块的path变量查看python导入模块时搜索的模块的路径，也可以使用**append()**方法向其中添加自定义的文件夹以扩展搜索路径。</p>
+<p>​    在导入模块时，会优先导入相应的 .pyc文件，如果相应的.pyc文件与.py文件时间不相符或者不存在相应的.pyc文件，则导入.py文件并重新将该模块文件编译为.pyc文件。</p>
+<p>​    在大的程序中可能会需要导入很多模块，此时应该按照这样的顺序来以此导入模块</p>
+<ol>
+<li>导入python标准库模块，如os、sys、re</li>
+<li>导入第三方扩展库，如PIL、numpy、scipy</li>
+<li>导入自己定义和开发的本地模块</li>
+</ol>
+<h2 id="代码编写规范"><a href="#代码编写规范" class="headerlink" title="代码编写规范"></a>代码编写规范</h2><h4 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h4><p>​        python程序是依靠代码块的缩进来体现代码之间的逻辑关系的。对于类定义、函数定义、选择结构、循环结构以及异常处理结构来说，行尾的冒号以及下一行的缩进表示一个代码块的开始，而缩进结束则表示一个代码块结束了。在编写程序中，同一个级别的代码块的缩进量必须相同</p>
+<pre class="line-numbers language-none"><code class="language-none">&gt;&gt;&gt; a,b,c&#x3D;3,4,5
+&gt;&gt;&gt; if a&gt;b:
+...     if a&gt;c:
+...             print(c)
+...     else:
+...             print(a)
+... else:
+...     if(b&gt;c):
+...             print(c)
+...     else:
+...             print(b)
+...             print(&#39;OK&#39;)
+...
+4
+OK<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4><h6 id="行注释"><a href="#行注释" class="headerlink" title="行注释"></a>行注释</h6><p>​            以符号 # 开始，表示本行#之后的内容为注释</p>
+<h6 id="块注释"><a href="#块注释" class="headerlink" title="块注释"></a>块注释</h6><p>​            包含在一对三引号（’’’……’’’）或（”””……”””）之间，且不属于任何语句的内容将被解释器认为是注释</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>​        每个import语句只导入一个模块，尽量避免一次导入多个模块</p>
+<p>​        <strong>如果一行语句太长，可以在行尾使用 续行符 “\” 来表示下面紧接的一行仍属于当前语句，但是一般建议使用括号来包含多行内容</strong></p>
+<p>​        使用必要的空格和空行增强代码的可读性。一般来说，运算符的两侧，函数参数之间，逗号两侧建议使用空格进行分隔，而不同功能的代码块之间，不同的函数定义以及不同的类定义之间则建议增加一个空行以增加可读性</p>
+<p>​        适当使用异常处理结构提高程序容错性和健壮性，但不能过多依赖异常处理结构，适当的显式判断还是必要的</p>
+<p>​        软件应具有较强的可测试性，测试与开发齐头并进。</p>
+<p>以上</p>
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>WinX</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://github.winxcloud.top/2021/03/python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" title="Python学习记录——基础">http://github.winxcloud.top/2021/03/python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2021/04/ssh%E9%80%9A%E8%BF%87rsa%E5%85%AC%E9%92%A5%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="prev" title="ssh 免密码连接服务器"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">ssh 免密码连接服务器</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/11/WinX%E3%81%AE%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" rel="next" title="WinXの第一篇博客"><span class="post-nav-text">WinXの第一篇博客</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>要不要和我说些什么？</span><br></div></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">晋ICP备2021001815号</a></div><div class="copyright"><span>&copy; 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> WinX</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.6.1</span></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#ceb1ca" stroke-width="2" stroke-linecap="round"></circle></svg></a></div></body></html>
